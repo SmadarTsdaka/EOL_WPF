@@ -16,6 +16,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Controls;component/Resources/ButtonWithIcon.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/ScriptHandler;component/Resources/ScriptLogDiagramTemplate.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/ScriptRunner;component/Resources/ScriptStepTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style x:Key="UserTypeRadioStyle" TargetType="RadioButton">
