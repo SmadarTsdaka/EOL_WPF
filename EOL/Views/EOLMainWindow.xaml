@@ -6,6 +6,7 @@
                  xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                 xmlns:device_handler_views="clr-namespace:DeviceHandler.Views;assembly=DeviceHandler"
                  xmlns:local="clr-namespace:EOL.Views"
                  mc:Ignorable="d"
                  Title="EOL" Height="650" Width="1000">
@@ -82,31 +83,42 @@
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5,0" >
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="5,0" >
 
-            <RadioButton Content="Admin" 
-                         Style="{StaticResource UserTypeRadioStyle}" 
-                         GroupName="UserTypeGroup" 
-                         Margin="0,2,0,2"
-                         Command="{Binding SetAdminCommand}"/>
-            <RadioButton Content="User" 
-                         Style="{StaticResource UserTypeRadioStyle}" 
-                         GroupName="UserTypeGroup" 
-                         Margin="0,2,50,2"
-                         IsChecked="True"
-                         Command="{Binding SetUserCommand}"/>
+                <RadioButton Content="Admin" 
+                             Style="{StaticResource UserTypeRadioStyle}" 
+                             GroupName="UserTypeGroup" 
+                             Margin="0,2,0,2"
+                             Command="{Binding SetAdminCommand}"/>
+                <RadioButton Content="User" 
+                             Style="{StaticResource UserTypeRadioStyle}" 
+                             GroupName="UserTypeGroup" 
+                             Margin="0,2,50,2"
+                             IsChecked="True"
+                             Command="{Binding SetUserCommand}"/>
 
-            <Button Style="{StaticResource ButtonWithIconStyle}"
+                <Button Style="{StaticResource ButtonWithIconStyle}"
                         Width="25"
                         Height="25"
                         Margin="0,0,5,0"
                         ToolTip="Change the background to Dark/Light"
                         Command="{Binding ChangeDarkLightCommand}"
                         VerticalAlignment="Center">
-                <iconPacks:Material Kind="InvertColors" />
-            </Button>
+                    <iconPacks:Material Kind="InvertColors" />
+                </Button>
 
-        </StackPanel>
+            </StackPanel>
+
+            <device_handler_views:CommunicationIndeicatorView DataContext="{Binding DevicesContainter}"
+                                                              Grid.Column="2"/>
+        </Grid>
 
         <ContentControl Grid.Row="2" Content="{Binding Docking}" Margin="5"/>
 

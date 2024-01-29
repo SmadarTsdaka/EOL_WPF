@@ -8,10 +8,12 @@ using System.Collections.ObjectModel;
 using System;
 using System.ComponentModel;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using static System.Net.Mime.MediaTypeNames;
-using System.Windows.Documents;
-using System.Windows;
+using DeviceHandler.Models;
+using DeviceCommunicators.Models;
+using DeviceHandler.Models.DeviceFullDataModels;
+using Entities.Enums;
+using DeviceCommunicators.Services;
+using System.Linq;
 
 namespace EOL.ViewModels
 {
@@ -22,11 +24,14 @@ namespace EOL.ViewModels
 		public string Version { get; set; }
 		public EOLDockingViewModel Docking { get; set; }
 
+		public DevicesContainer DevicesContainter { get; set; }
+
 		#endregion Properties
 
 		#region Fields
 
 		private EOLSettings _eolSettings;
+		private UserViewModel _userVM;
 
 		#endregion Fields
 
@@ -36,7 +41,6 @@ namespace EOL.ViewModels
 		{		
 
 			Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-			Docking = new EOLDockingViewModel("DockingMain");
 
 			SetAdminCommand = new RelayCommand(SetAdmin);
 			SetUserCommand = new RelayCommand(SetUser);
@@ -53,9 +57,9 @@ namespace EOL.ViewModels
 		private void Closing(CancelEventArgs e)
 		{
 			EOLSettings.SaveEvvaUserData("EOL",_eolSettings);
-
-			
 		}
+
+		#region Load
 
 		private void Loaded()
 		{
@@ -71,13 +75,87 @@ namespace EOL.ViewModels
 				_eolSettings = EOLSettings.LoadEvvaUserData("EOL");
 				ChangeDarkLight();
 
+				DevicesContainter = new DevicesContainer();
+				DevicesContainter.DevicesFullDataList = new ObservableCollection<DeviceFullData>();
+				DevicesContainter.DevicesList = new ObservableCollection<DeviceData>();
+				DevicesContainter.TypeToDevicesFullData = new Dictionary<DeviceTypesEnum, DeviceFullData>();
+				UpdateSetup();
 
+
+				_userVM = new UserViewModel();
+
+
+				Docking = new EOLDockingViewModel(_userVM);
 			}
 			catch (Exception ex)
 			{
 				LoggerService.Error(this, "Failed to init the main window", "Startup Error", ex);
 			}
 		}
+
+		private void UpdateSetup()
+		{
+
+			ReadDevicesFileService readDevicesFile = new ReadDevicesFileService();
+			ObservableCollection<DeviceData> deviceList = readDevicesFile.ReadAllFiles(
+				@"Data\Device Communications\",
+				@"Data\Device Communications\param_defaults.json",
+				null,
+				null,
+				null,
+				false);
+
+
+			List<DeviceData> newDevices = new List<DeviceData>();
+			foreach (DeviceData deviceData in deviceList)
+			{
+				DeviceData existingDevice =
+					DevicesContainter.DevicesList.ToList().Find((d) => d.DeviceType == deviceData.DeviceType);
+				if (existingDevice == null)
+					newDevices.Add(deviceData);
+			}
+
+			List<DeviceData> removedDevices = new List<DeviceData>();
+			foreach (DeviceData deviceData in DevicesContainter.DevicesList)
+			{
+				DeviceData existingDevice =
+					deviceList.ToList().Find((d) => d.DeviceType == deviceData.DeviceType);
+				if (existingDevice == null)
+					removedDevices.Add(deviceData);
+			}
+
+
+
+
+			foreach (DeviceData device in removedDevices)
+			{
+				DeviceFullData deviceFullData =
+					DevicesContainter.DevicesFullDataList.ToList().Find((d) => d.Device.DeviceType == device.DeviceType);
+				deviceFullData.Disconnect();
+
+				DevicesContainter.DevicesFullDataList.Remove(deviceFullData);
+				DevicesContainter.DevicesList.Remove(deviceFullData.Device);
+				DevicesContainter.TypeToDevicesFullData.Remove(deviceFullData.Device.DeviceType);
+			}
+
+
+
+			foreach (DeviceData device in newDevices)
+			{
+				DeviceFullData deviceFullData = DeviceFullData.Factory(device);
+
+				deviceFullData.Init();
+
+				DevicesContainter.DevicesFullDataList.Add(deviceFullData);
+				DevicesContainter.DevicesList.Add(device as DeviceData);
+				if (DevicesContainter.TypeToDevicesFullData.ContainsKey(device.DeviceType) == false)
+					DevicesContainter.TypeToDevicesFullData.Add(device.DeviceType, deviceFullData);
+
+				deviceFullData.Connect();
+			}
+		}
+
+		#endregion Load
 
 		private void SetAdmin()
 		{
@@ -86,7 +164,7 @@ namespace EOL.ViewModels
 
 		private void SetUser()
 		{
-
+			Docking.ShowUser();
 		}
 
 		private void ChangeDarkLight()
