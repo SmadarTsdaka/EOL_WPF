@@ -22,6 +22,7 @@
     <ProjectReference Include="..\DevicesInfrastructures\DeviceHandler\DeviceHandler.csproj" />
     <ProjectReference Include="..\Infrastructure\Controls\Controls.csproj" />
     <ProjectReference Include="..\Infrastructure\Services\Services.csproj" />
+    <ProjectReference Include="..\ScriptsInfrastructure\ScriptHandler\ScriptHandler.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

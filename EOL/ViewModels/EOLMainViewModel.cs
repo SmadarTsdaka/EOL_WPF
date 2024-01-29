@@ -14,6 +14,7 @@ using DeviceHandler.Models.DeviceFullDataModels;
 using Entities.Enums;
 using DeviceCommunicators.Services;
 using System.Linq;
+using ScriptHandler.ViewModels;
 
 namespace EOL.ViewModels
 {
@@ -31,7 +32,9 @@ namespace EOL.ViewModels
 		#region Fields
 
 		private EOLSettings _eolSettings;
+
 		private UserViewModel _userVM;
+		private DesignViewModel _designVM;
 
 		#endregion Fields
 
@@ -83,9 +86,15 @@ namespace EOL.ViewModels
 
 
 				_userVM = new UserViewModel();
+				_designVM = new DesignViewModel(DevicesContainter, _eolSettings.ScriptUserData);
 
 
-				Docking = new EOLDockingViewModel(_userVM);
+				Docking = new EOLDockingViewModel(
+					_userVM,
+					_designVM);
+
+				Docking.ShowUser();
+				Docking.HideAdmin();
 			}
 			catch (Exception ex)
 			{
@@ -159,12 +168,14 @@ namespace EOL.ViewModels
 
 		private void SetAdmin()
 		{
-
+			Docking.HideUser();
+			Docking.ShowAdmin();
 		}
 
 		private void SetUser()
 		{
 			Docking.ShowUser();
+			Docking.HideAdmin();
 		}
 
 		private void ChangeDarkLight()

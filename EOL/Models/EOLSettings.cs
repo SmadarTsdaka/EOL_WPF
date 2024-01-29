@@ -2,12 +2,14 @@
 using System.IO;
 using System;
 using Newtonsoft.Json;
+using ScriptHandler.Models;
 
 namespace EOL.Models
 {
 	public class EOLSettings
 	{
 		public bool IsLightTheme { get; set; }
+		public ScriptUserData ScriptUserData { get; set; }
 
 		public EOLSettings()
 		{
@@ -18,6 +20,8 @@ namespace EOL.Models
 		{
 			EOLSettings eolSettings = new EOLSettings();
 			eolSettings.IsLightTheme = false;
+			eolSettings.ScriptUserData = new ScriptUserData();
+
 
 			return eolSettings;
 		}
@@ -46,6 +50,9 @@ namespace EOL.Models
 			settings.Formatting = Formatting.Indented;
 			settings.TypeNameHandling = TypeNameHandling.All;
 			eolSettings = JsonConvert.DeserializeObject(jsonString, settings) as EOLSettings;
+
+			if (eolSettings.ScriptUserData == null)
+				eolSettings.ScriptUserData = new ScriptUserData();
 
 			if (eolSettings != null)
 				return eolSettings;
