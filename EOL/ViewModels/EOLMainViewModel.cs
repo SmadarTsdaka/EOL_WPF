@@ -101,6 +101,8 @@ namespace EOL.ViewModels
 
 				Docking.ShowUser();
 				Docking.HideAdmin();
+
+				_runVM.CreateScriptLoggerWindow();
 			}
 			catch (Exception ex)
 			{

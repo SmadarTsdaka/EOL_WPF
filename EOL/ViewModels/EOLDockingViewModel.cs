@@ -16,6 +16,7 @@ namespace EOL.ViewModels
 		private ContentControl _userView;
 		private ContentControl _designView;
 		private ContentControl _runView;
+		private ContentControl _mainScriptLogger;
 
 		public EOLDockingViewModel(
 			UserViewModel userVM,
@@ -53,8 +54,30 @@ namespace EOL.ViewModels
 
 			RunView runView = new RunView() { DataContext = runVM };
 			CreateTabbedWindow(runView, "Run", "Design", out _runView);
+			runVM.CreateScriptLogDiagramViewEvent += Run_CreateScriptLogDiagramViewEvent;
+			runVM.ShowScriptLogDiagramViewEvent += Run_ShowScriptLogDiagramViewEvent;
 		}
 
+		private void Run_CreateScriptLogDiagramViewEvent(ScriptLogDiagramViewModel mainScriptLogger)
+		{
+			_mainScriptLogger = new ContentControl();
+			ScriptLogDiagramView scriptLog = new ScriptLogDiagramView() { DataContext = mainScriptLogger };
+			_mainScriptLogger.Content = scriptLog;
+			SetHeader(_mainScriptLogger, "Script Run Diagram");
+			SetState(_mainScriptLogger, DockState.Hidden);
+			SetSideInDockedMode(_mainScriptLogger, DockSide.Right);
+			Children.Add(_mainScriptLogger);
+		}
+
+		private void Run_ShowScriptLogDiagramViewEvent()
+		{
+			OpenLogScript();
+		}
+
+		public void OpenLogScript()
+		{
+			SetState(_mainScriptLogger, DockState.Dock);
+		}
 
 		public void ShowUser()
 		{			
@@ -72,12 +95,14 @@ namespace EOL.ViewModels
 		{
 			SetState(_designView, DockState.Dock);
 			SetState(_runView, DockState.Dock);
+			SetState(_mainScriptLogger, DockState.Dock);
 		}
 
 		public void HideAdmin()
 		{
 			SetState(_designView, DockState.Hidden);
 			SetState(_runView, DockState.Hidden);
+			SetState(_mainScriptLogger, DockState.Hidden);
 		}
 	}
 }
