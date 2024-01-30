@@ -16,6 +16,7 @@ using DeviceCommunicators.Services;
 using System.Linq;
 using ScriptHandler.ViewModels;
 using ScriptRunner.ViewModels;
+using DeviceHandler.ViewModels;
 
 namespace EOL.ViewModels
 {
@@ -37,6 +38,7 @@ namespace EOL.ViewModels
 		private UserViewModel _userVM;
 		private DesignViewModel _designVM;
 		private RunViewModel _runVM;
+		private CommunicationViewModel _communicationSettings;
 
 		#endregion Fields
 
@@ -53,6 +55,9 @@ namespace EOL.ViewModels
 
 			ClosingCommand = new RelayCommand<CancelEventArgs>(Closing);
 			LoadedCommand = new RelayCommand(Loaded);
+
+
+			CommunicationSettingsCommand = new RelayCommand(InitCommunicationSettings);
 		}
 
 		#endregion Constructor
@@ -94,10 +99,13 @@ namespace EOL.ViewModels
 					new ObservableCollection<DeviceParameterData>();
 				_runVM = new RunViewModel(logParametersList, DevicesContainter, _eolSettings.ScriptUserData, null);
 
+				_communicationSettings = new CommunicationViewModel(DevicesContainter);
+
 				Docking = new EOLDockingViewModel(
 					_userVM,
 					_designVM,
-					_runVM);
+					_runVM,
+					_communicationSettings);
 
 				Docking.ShowUser();
 				Docking.HideAdmin();
@@ -189,9 +197,12 @@ namespace EOL.ViewModels
 		private void ChangeDarkLight()
 		{
 			_eolSettings.IsLightTheme = !_eolSettings.IsLightTheme;
-			App.ChangeDarkLight(_eolSettings.IsLightTheme);
+			App.ChangeDarkLight(_eolSettings.IsLightTheme);			
+		}
 
-			
+		private void InitCommunicationSettings()
+		{
+			Docking.OpenCommSettings();
 		}
 
 		#endregion Methods
@@ -204,6 +215,8 @@ namespace EOL.ViewModels
 
 		public RelayCommand LoadedCommand { get; private set; }
 		public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
+
+		public RelayCommand CommunicationSettingsCommand { get; private set; }
 
 		#endregion Commands
 	}

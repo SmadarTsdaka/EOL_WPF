@@ -1,5 +1,7 @@
 ﻿
 using Controls.ViewModels;
+using DeviceHandler.ViewModels;
+using DeviceHandler.Views;
 using EOL.Views;
 using ScriptHandler.ViewModels;
 using ScriptHandler.Views;
@@ -17,11 +19,13 @@ namespace EOL.ViewModels
 		private ContentControl _designView;
 		private ContentControl _runView;
 		private ContentControl _mainScriptLogger;
+		private ContentControl _communicationSettings;
 
 		public EOLDockingViewModel(
 			UserViewModel userVM,
 			DesignViewModel designVM,
-			RunViewModel runVM) :
+			RunViewModel runVM,
+			CommunicationViewModel communicationSettings) :
 			base("EOL")
 		{
 			DockFill = true;
@@ -29,13 +33,15 @@ namespace EOL.ViewModels
 			CreateWindows(
 				userVM,
 				designVM,
-				runVM);
+				runVM,
+				communicationSettings);
 		}
 
 		private void CreateWindows(
 			UserViewModel userVM,
 			DesignViewModel designVM,
-			RunViewModel runVM)
+			RunViewModel runVM,
+			CommunicationViewModel communicationSettings)
 		{
 			_userView = new ContentControl();
 			UserView userView = new UserView() { DataContext = userVM };
@@ -46,6 +52,14 @@ namespace EOL.ViewModels
 			SetCanFloat(_userView, false);
 			SetCanDocument(_userView, false);
 			Children.Add(_userView);
+
+
+			_communicationSettings = new ContentControl();
+			CommunicationView communication = new CommunicationView() { DataContext = communicationSettings };
+			_communicationSettings.Content = communication;
+			SetHeader(_communicationSettings, "Communication Settings");
+			SetFloatParams(_communicationSettings);
+			Children.Add(_communicationSettings);
 
 
 			DesignView designView = new DesignView() { DataContext = designVM };
@@ -78,6 +92,15 @@ namespace EOL.ViewModels
 		{
 			SetState(_mainScriptLogger, DockState.Dock);
 		}
+
+		public void OpenCommSettings()
+		{
+			SetState(_communicationSettings, DockState.Float);
+		}
+
+
+
+
 
 		public void ShowUser()
 		{			
