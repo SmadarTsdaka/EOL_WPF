@@ -17,6 +17,8 @@ using System.Linq;
 using ScriptHandler.ViewModels;
 using ScriptRunner.ViewModels;
 using DeviceHandler.ViewModels;
+using System.Windows;
+using DeviceSimulators.ViewModels;
 
 namespace EOL.ViewModels
 {
@@ -29,6 +31,8 @@ namespace EOL.ViewModels
 
 		public DevicesContainer DevicesContainter { get; set; }
 
+		public Visibility SimulatorsButtonVisibility { get; set; }
+
 		#endregion Properties
 
 		#region Fields
@@ -38,7 +42,6 @@ namespace EOL.ViewModels
 		private UserViewModel _userVM;
 		private DesignViewModel _designVM;
 		private RunViewModel _runVM;
-		private CommunicationViewModel _communicationSettings;
 
 		#endregion Fields
 
@@ -57,7 +60,8 @@ namespace EOL.ViewModels
 			LoadedCommand = new RelayCommand(Loaded);
 
 
-			CommunicationSettingsCommand = new RelayCommand(InitCommunicationSettings);
+			CommunicationSettingsCommand = new RelayCommand(InitCommunicationSettings); 
+			DeviceSimulatorCommand = new RelayCommand(DeviceSimulator);
 		}
 
 		#endregion Constructor
@@ -99,16 +103,20 @@ namespace EOL.ViewModels
 					new ObservableCollection<DeviceParameterData>();
 				_runVM = new RunViewModel(logParametersList, DevicesContainter, _eolSettings.ScriptUserData, null);
 
-				_communicationSettings = new CommunicationViewModel(DevicesContainter);
+				CommunicationViewModel communicationSettings = new CommunicationViewModel(DevicesContainter);
+				DeviceSimulatorsViewModel deviceSimulatorsViewModel =
+					new DeviceSimulatorsViewModel(DevicesContainter);
 
 				Docking = new EOLDockingViewModel(
 					_userVM,
 					_designVM,
 					_runVM,
-					_communicationSettings);
+					communicationSettings,
+					deviceSimulatorsViewModel);
 
 				Docking.ShowUser();
 				Docking.HideAdmin();
+				SimulatorsButtonVisibility = Visibility.Collapsed;
 
 				_runVM.CreateScriptLoggerWindow();
 			}
@@ -182,16 +190,23 @@ namespace EOL.ViewModels
 
 		#endregion Load
 
+		private void DeviceSimulator()
+		{
+			Docking.OpenDeviceSimulators();
+		}
+
 		private void SetAdmin()
 		{
 			Docking.HideUser();
 			Docking.ShowAdmin();
+			SimulatorsButtonVisibility = Visibility.Visible;
 		}
 
 		private void SetUser()
 		{
 			Docking.ShowUser();
 			Docking.HideAdmin();
+			SimulatorsButtonVisibility = Visibility.Collapsed;
 		}
 
 		private void ChangeDarkLight()
@@ -217,6 +232,7 @@ namespace EOL.ViewModels
 		public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
 
 		public RelayCommand CommunicationSettingsCommand { get; private set; }
+		public RelayCommand DeviceSimulatorCommand { get; private set; }
 
 		#endregion Commands
 	}

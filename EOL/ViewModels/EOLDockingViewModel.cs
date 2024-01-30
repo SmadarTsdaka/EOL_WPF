@@ -2,6 +2,8 @@
 using Controls.ViewModels;
 using DeviceHandler.ViewModels;
 using DeviceHandler.Views;
+using DeviceSimulators.ViewModels;
+using DeviceSimulators.Views;
 using EOL.Views;
 using ScriptHandler.ViewModels;
 using ScriptHandler.Views;
@@ -20,12 +22,14 @@ namespace EOL.ViewModels
 		private ContentControl _runView;
 		private ContentControl _mainScriptLogger;
 		private ContentControl _communicationSettings;
+		private ContentControl _deviceSimulatorsViewModel;
 
 		public EOLDockingViewModel(
 			UserViewModel userVM,
 			DesignViewModel designVM,
 			RunViewModel runVM,
-			CommunicationViewModel communicationSettings) :
+			CommunicationViewModel communicationSettings,
+			DeviceSimulatorsViewModel deviceSimulatorsViewModel) :
 			base("EOL")
 		{
 			DockFill = true;
@@ -34,14 +38,16 @@ namespace EOL.ViewModels
 				userVM,
 				designVM,
 				runVM,
-				communicationSettings);
+				communicationSettings,
+				deviceSimulatorsViewModel);
 		}
 
 		private void CreateWindows(
 			UserViewModel userVM,
 			DesignViewModel designVM,
 			RunViewModel runVM,
-			CommunicationViewModel communicationSettings)
+			CommunicationViewModel communicationSettings,
+			DeviceSimulatorsViewModel deviceSimulatorsViewModel)
 		{
 			_userView = new ContentControl();
 			UserView userView = new UserView() { DataContext = userVM };
@@ -60,6 +66,13 @@ namespace EOL.ViewModels
 			SetHeader(_communicationSettings, "Communication Settings");
 			SetFloatParams(_communicationSettings);
 			Children.Add(_communicationSettings);
+
+			_deviceSimulatorsViewModel = new ContentControl();
+			DeviceSimulatorsView deviceSimulators = new DeviceSimulatorsView() { DataContext = deviceSimulatorsViewModel };
+			_deviceSimulatorsViewModel.Content = deviceSimulators;
+			SetHeader(_deviceSimulatorsViewModel, "Device Simulators");
+			SetFloatParams(_deviceSimulatorsViewModel);
+			Children.Add(_deviceSimulatorsViewModel);
 
 
 			DesignView designView = new DesignView() { DataContext = designVM };
@@ -98,7 +111,10 @@ namespace EOL.ViewModels
 			SetState(_communicationSettings, DockState.Float);
 		}
 
-
+		public void OpenDeviceSimulators()
+		{
+			SetState(_deviceSimulatorsViewModel, DockState.Float);
+		}
 
 
 
