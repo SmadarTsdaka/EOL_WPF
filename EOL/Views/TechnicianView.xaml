@@ -87,10 +87,10 @@
 
         <Grid Grid.Row="2" Margin="10,0">
 
-            <ProgressBar Minimum="0" Maximum="100" Value="{Binding ProgressPercentage}" />
+            <ProgressBar Minimum="0" Maximum="100" Value="{Binding RunScript.ExecutedStepsPercentage}" />
             
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock Grid.Column="4" Text="{Binding ProgressPercentage}" 
+                <TextBlock Grid.Column="4" Text="{Binding RunScript.ExecutedStepsPercentage}" 
                            VerticalAlignment="Center" 
                            FontSize="14" FontWeight="DemiBold"
                            Foreground="White"/>

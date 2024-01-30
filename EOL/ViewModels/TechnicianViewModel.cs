@@ -23,8 +23,6 @@ namespace EOL.ViewModels
 
 		public ScriptStateEnum ScriptState { get; set; }
 
-		public int ProgressPercentage { get; set; }
-
 		public RunScriptService RunScript { get; set; }
 		public string ErrorDescription { get; set; }
 
@@ -50,7 +48,6 @@ namespace EOL.ViewModels
 			RunCommand = new RelayCommand(Run);
 
 			ScriptState = ScriptStateEnum.None;
-			ProgressPercentage = 0;
 
 			StopScriptStepService stopScriptStep = new StopScriptStepService();
 			RunScript = new RunScriptService(
@@ -82,6 +79,7 @@ namespace EOL.ViewModels
 			try
 			{
 				ErrorDescription = string.Empty;
+				ScriptState = ScriptStateEnum.None;
 
 				GeneratedScriptData currentScript = GetScript(
 					@"C:\Users\smadar\Documents\Scripts\Tests\Run Repeat Set\Run Repeat Set.gprj");
@@ -134,6 +132,8 @@ namespace EOL.ViewModels
 					RunScript.CurrentScript.CurrentScript.ScriptItemsList[0] as ScriptStepNotification;
 				ErrorDescription = notification.Notification;
 			}
+
+			RunScript.ExecutedStepsPercentage = 100;
 		}
 
 		#endregion Methods
