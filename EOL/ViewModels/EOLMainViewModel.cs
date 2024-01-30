@@ -119,6 +119,19 @@ namespace EOL.ViewModels
 				SimulatorsButtonVisibility = Visibility.Collapsed;
 
 				_runVM.CreateScriptLoggerWindow();
+
+				try
+				{
+					foreach (DeviceFullData deviceFullData in DevicesContainter.DevicesFullDataList)
+					{
+						deviceFullData.InitCheckConnection();
+					}
+				}
+				catch (Exception ex)
+				{
+					LoggerService.Error(this, "Failed to init the communication check", ex);
+
+				}
 			}
 			catch (Exception ex)
 			{
