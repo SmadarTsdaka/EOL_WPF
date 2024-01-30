@@ -15,6 +15,7 @@ using Entities.Enums;
 using DeviceCommunicators.Services;
 using System.Linq;
 using ScriptHandler.ViewModels;
+using ScriptRunner.ViewModels;
 
 namespace EOL.ViewModels
 {
@@ -35,6 +36,7 @@ namespace EOL.ViewModels
 
 		private UserViewModel _userVM;
 		private DesignViewModel _designVM;
+		private RunViewModel _runVM;
 
 		#endregion Fields
 
@@ -88,10 +90,14 @@ namespace EOL.ViewModels
 				_userVM = new UserViewModel();
 				_designVM = new DesignViewModel(DevicesContainter, _eolSettings.ScriptUserData);
 
+				ObservableCollection<DeviceParameterData> logParametersList = 
+					new ObservableCollection<DeviceParameterData>();
+				_runVM = new RunViewModel(logParametersList, DevicesContainter, _eolSettings.ScriptUserData, null);
 
 				Docking = new EOLDockingViewModel(
 					_userVM,
-					_designVM);
+					_designVM,
+					_runVM);
 
 				Docking.ShowUser();
 				Docking.HideAdmin();
