@@ -1,9 +1,17 @@
 ﻿
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-using System.Windows;
+using DeviceCommunicators.Models;
+using DeviceHandler.Models;
+using Newtonsoft.Json;
+using ScriptHandler.Models;
+using ScriptHandler.Services;
+using ScriptRunner.Enums;
+using ScriptRunner.Models;
+using ScriptRunner.Services;
+using Services.Services;
+using System;
+using System.IO;
 
 namespace EOL.ViewModels
 {
@@ -17,57 +25,115 @@ namespace EOL.ViewModels
 
 		public int ProgressPercentage { get; set; }
 
-		public string CurrentStepName { get; set; }
+		public RunScriptService RunScript { get; set; }
+		public string ErrorDescription { get; set; }
 
 		#endregion Properties
 
+		#region Fields
+
+		private DevicesContainer _devicesContainer;
+		private OpenProjectForRunService _openProjectForRun;
+		private ScriptUserData _scriptUserData;
+
+		#endregion Fields
+
 		#region Constructor
 
-		public TechnicianViewModel()
+		public TechnicianViewModel(
+			DevicesContainer devicesContainer,
+			ScriptUserData scriptUserData)
 		{
+			_devicesContainer = devicesContainer;
+			_scriptUserData = scriptUserData;
+
 			RunCommand = new RelayCommand(Run);
 
 			ScriptState = ScriptStateEnum.None;
 			ProgressPercentage = 0;
+
+			StopScriptStepService stopScriptStep = new StopScriptStepService();
+			RunScript = new RunScriptService(
+					null,
+					devicesContainer,
+					null,
+					null);
+
+			RunScript.ScriptEndedEvent += RunScript_ScriptEndedEvent;
+
+			_openProjectForRun = new OpenProjectForRunService();
 		}
+
+		
 
 		#endregion Constructor
 
 		#region Methods
 
+		private GeneratedScriptData GetScript(string path)
+		{
+			GeneratedProjectData project = _openProjectForRun.Open(path, _devicesContainer, RunScript);
+
+			return project.TestsList[0];
+		}
+
 		private void Run()
 		{
-			ScriptState = ScriptStateEnum.Running;
-
-			Task.Run(() =>
+			try
 			{
-				for (int i = 0; i < 100; i += 10)
-				{
-					Application.Current.Dispatcher.Invoke(() =>
-					{
-						ProgressPercentage = i;
-						switch (ProgressPercentage)
-						{
-							case 0: CurrentStepName = "Set  \"Voltage\" = 48234 - ID:1"; break;
-							case 10: CurrentStepName = "Delay 3 sec - ID:2"; break;
-							case 20: CurrentStepName = "Set  \"Turn ON channel\" = 0 - ID:3"; break;
-							case 30: CurrentStepName = "Increment  \"Manual Throttle (MCU)\" By 5 - ID:4"; break;
-							case 40: CurrentStepName = "Compare Range: \"Manual Throttle (MCU)\" = \"Motor Kv (MCU)\" = \"Manual FOC Control (MCU)\" - ID:5"; break;
-							case 50: CurrentStepName = "Converge  \"Manual Throttle (MCU)\" = 50 - ID:6"; break;
-							case 60: CurrentStepName = "Dynamic Control - ID:1"; break;
-							case 70: CurrentStepName = "Set  \"Turn ON channel\" = 0 - ID:7"; break;
-							case 80: CurrentStepName = "Set \"Manual Threottle\" = " + i + "-ID:8"; break;
-							case 90: CurrentStepName = "Set \"Manual Threottle\" = " + i + "-ID:9"; break;
-						}
-					});
+				ErrorDescription = string.Empty;
 
-					System.Threading.Thread.Sleep(1000);
+				GeneratedScriptData currentScript = GetScript(
+					@"C:\Users\smadar\Documents\Scripts\Tests\Run Repeat Set\Run Repeat Set.gprj");
+				if (currentScript == null)
+					return;
+
+				RunScript.AbortScriptPath = @"C:\Users\smadar\Documents\Scripts\Tests\Empty Script.scr";
+
+				if (RunScript.AbortScriptStep == null)
+				{
+					if (string.IsNullOrEmpty(RunScript.AbortScriptPath))
+					{
+						LoggerService.Error(this, "No abort script is defined", "Run Script");
+						return;
+					}
+
+					RunScript.AbortScriptStep = new ScriptStepAbort(RunScript.AbortScriptPath, _devicesContainer);
+					if (RunScript.AbortScriptStep == null)
+					{
+						LoggerService.Error(this, "The abort script is invalid", "Run Script");
+						return;
+					}
+
+
 				}
 
-				CurrentStepName = null;
+				RunScript.Run(
+					null,
+					currentScript,
+					null,
+					false);
+			}
+			catch(Exception ex) 
+			{
+				LoggerService.Error(this, "Fialed to run", "Error", ex);
+			}
+		}
+
+		private void RunScript_ScriptEndedEvent(ScriptStopModeEnum scriptStopMode)
+		{
+			if (scriptStopMode == ScriptStopModeEnum.Ended)
 				ScriptState = ScriptStateEnum.Pass;
-				ProgressPercentage = 100;
-			});
+			else
+				ScriptState = ScriptStateEnum.Fail;
+
+			if (RunScript.CurrentScript != null &&
+				RunScript.CurrentScript.CurrentScript.Name == "Failed Step Notification")
+			{
+				ScriptStepNotification notification =
+					RunScript.CurrentScript.CurrentScript.ScriptItemsList[0] as ScriptStepNotification;
+				ErrorDescription = notification.Notification;
+			}
 		}
 
 		#endregion Methods
