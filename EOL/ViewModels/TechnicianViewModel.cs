@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace EOL.ViewModels
 {
-	public class UserViewModel:ObservableObject
+	public class TechnicianViewModel:ObservableObject
 	{
 		public enum ScriptStateEnum { Running, Pass, Fail, None, }
 
@@ -23,7 +23,7 @@ namespace EOL.ViewModels
 
 		#region Constructor
 
-		public UserViewModel()
+		public TechnicianViewModel()
 		{
 			RunCommand = new RelayCommand(Run);
 

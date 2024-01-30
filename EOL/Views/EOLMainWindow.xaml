@@ -99,12 +99,12 @@
                              GroupName="UserTypeGroup" 
                              Margin="0,2,0,2"
                              Command="{Binding SetAdminCommand}"/>
-                <RadioButton Content="User" 
+                <RadioButton Content="Technician" 
                              Style="{StaticResource UserTypeRadioStyle}" 
                              GroupName="UserTypeGroup" 
                              Margin="0,2,50,2"
                              IsChecked="True"
-                             Command="{Binding SetUserCommand}"/>
+                             Command="{Binding SetTechnicianCommand}"/>
 
                 <Button Style="{StaticResource ButtonWithIconStyle}"
                         Width="25"

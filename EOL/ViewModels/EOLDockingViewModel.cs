@@ -17,7 +17,7 @@ namespace EOL.ViewModels
 {
 	public class EOLDockingViewModel : DocingBaseViewModel
 	{
-		private ContentControl _userView;
+		private ContentControl _technicianView;
 		private ContentControl _designView;
 		private ContentControl _runView;
 		private ContentControl _mainScriptLogger;
@@ -25,7 +25,7 @@ namespace EOL.ViewModels
 		private ContentControl _deviceSimulatorsViewModel;
 
 		public EOLDockingViewModel(
-			UserViewModel userVM,
+			TechnicianViewModel technicianVM,
 			DesignViewModel designVM,
 			RunViewModel runVM,
 			CommunicationViewModel communicationSettings,
@@ -35,7 +35,7 @@ namespace EOL.ViewModels
 			DockFill = true;
 
 			CreateWindows(
-				userVM,
+				technicianVM,
 				designVM,
 				runVM,
 				communicationSettings,
@@ -43,21 +43,21 @@ namespace EOL.ViewModels
 		}
 
 		private void CreateWindows(
-			UserViewModel userVM,
+			TechnicianViewModel technicianVM,
 			DesignViewModel designVM,
 			RunViewModel runVM,
 			CommunicationViewModel communicationSettings,
 			DeviceSimulatorsViewModel deviceSimulatorsViewModel)
 		{
-			_userView = new ContentControl();
-			UserView userView = new UserView() { DataContext = userVM };
-			_userView.Content = userView;
-			SetHeader(_userView, "User");
+			_technicianView = new ContentControl();
+			TechnicianView technicianView = new TechnicianView() { DataContext = technicianVM };
+			_technicianView.Content = technicianView;
+			SetHeader(_technicianView, "Technician");
 			//SetCanClose(_userView, false);
-			SetCanAutoHide(_userView, false);
-			SetCanFloat(_userView, false);
-			SetCanDocument(_userView, false);
-			Children.Add(_userView);
+			SetCanAutoHide(_technicianView, false);
+			SetCanFloat(_technicianView, false);
+			SetCanDocument(_technicianView, false);
+			Children.Add(_technicianView);
 
 
 			_communicationSettings = new ContentControl();
@@ -118,16 +118,16 @@ namespace EOL.ViewModels
 
 
 
-		public void ShowUser()
+		public void ShowTechnician()
 		{			
-			SetState(_userView, DockState.Dock);
-			SetCanClose(_userView, false);
+			SetState(_technicianView, DockState.Dock);
+			SetCanClose(_technicianView, false);
 		}
 
-		public void HideUser()
+		public void HideTechnician()
 		{
-			SetCanClose(_userView, true);
-			SetState(_userView, DockState.Hidden);
+			SetCanClose(_technicianView, true);
+			SetState(_technicianView, DockState.Hidden);
 		}
 
 		public void ShowAdmin()

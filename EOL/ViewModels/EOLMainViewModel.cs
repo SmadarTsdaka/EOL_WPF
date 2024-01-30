@@ -39,7 +39,7 @@ namespace EOL.ViewModels
 
 		private EOLSettings _eolSettings;
 
-		private UserViewModel _userVM;
+		private TechnicianViewModel _userVM;
 		private DesignViewModel _designVM;
 		private RunViewModel _runVM;
 
@@ -53,7 +53,7 @@ namespace EOL.ViewModels
 			Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
 			SetAdminCommand = new RelayCommand(SetAdmin);
-			SetUserCommand = new RelayCommand(SetUser);
+			SetTechnicianCommand = new RelayCommand(SetTechnician);
 			ChangeDarkLightCommand = new RelayCommand(ChangeDarkLight);
 
 			ClosingCommand = new RelayCommand<CancelEventArgs>(Closing);
@@ -96,7 +96,7 @@ namespace EOL.ViewModels
 				UpdateSetup();
 
 
-				_userVM = new UserViewModel();
+				_userVM = new TechnicianViewModel();
 				_designVM = new DesignViewModel(DevicesContainter, _eolSettings.ScriptUserData);
 
 				ObservableCollection<DeviceParameterData> logParametersList = 
@@ -114,7 +114,7 @@ namespace EOL.ViewModels
 					communicationSettings,
 					deviceSimulatorsViewModel);
 
-				Docking.ShowUser();
+				Docking.ShowTechnician();
 				Docking.HideAdmin();
 				SimulatorsButtonVisibility = Visibility.Collapsed;
 
@@ -197,14 +197,14 @@ namespace EOL.ViewModels
 
 		private void SetAdmin()
 		{
-			Docking.HideUser();
+			Docking.HideTechnician();
 			Docking.ShowAdmin();
 			SimulatorsButtonVisibility = Visibility.Visible;
 		}
 
-		private void SetUser()
+		private void SetTechnician()
 		{
-			Docking.ShowUser();
+			Docking.ShowTechnician();
 			Docking.HideAdmin();
 			SimulatorsButtonVisibility = Visibility.Collapsed;
 		}
@@ -225,7 +225,7 @@ namespace EOL.ViewModels
 		#region Commands
 
 		public RelayCommand SetAdminCommand { get; private set; }
-		public RelayCommand SetUserCommand { get; private set; }
+		public RelayCommand SetTechnicianCommand { get; private set; }
 		public RelayCommand ChangeDarkLightCommand { get; private set; }
 
 		public RelayCommand LoadedCommand { get; private set; }

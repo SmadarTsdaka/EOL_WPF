@@ -18,9 +18,9 @@ namespace EOL.Views
 	/// <summary>
 	/// Interaction logic for UserView.xaml
 	/// </summary>
-	public partial class UserView : UserControl
+	public partial class TechnicianView : UserControl
 	{
-		public UserView()
+		public TechnicianView()
 		{
 			InitializeComponent();
 		}
