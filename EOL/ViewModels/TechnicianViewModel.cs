@@ -82,11 +82,11 @@ namespace EOL.ViewModels
 				ScriptState = ScriptStateEnum.None;
 
 				GeneratedScriptData currentScript = GetScript(
-					@"C:\Users\smadar\Documents\Scripts\Tests\Run Repeat Set\Run Repeat Set.gprj");
+					@"Data\Run Repeat Set.gprj");
 				if (currentScript == null)
 					return;
 
-				RunScript.AbortScriptPath = @"C:\Users\smadar\Documents\Scripts\Tests\Empty Script.scr";
+				RunScript.AbortScriptPath = @"Data\Empty Script.scr";
 
 				if (RunScript.AbortScriptStep == null)
 				{
