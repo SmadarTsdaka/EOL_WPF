@@ -39,7 +39,7 @@ namespace EOL.ViewModels
 
 		private EOLSettings _eolSettings;
 
-		private TechnicianViewModel _userVM;
+		private OperatorViewModel _userVM;
 		private DesignViewModel _designVM;
 		private RunViewModel _runVM;
 
@@ -96,7 +96,7 @@ namespace EOL.ViewModels
 				UpdateSetup();
 
 
-				_userVM = new TechnicianViewModel(DevicesContainter,_eolSettings.ScriptUserData);
+				_userVM = new OperatorViewModel(DevicesContainter,_eolSettings.ScriptUserData);
 				_designVM = new DesignViewModel(DevicesContainter, _eolSettings.ScriptUserData);
 
 				ObservableCollection<DeviceParameterData> logParametersList = 

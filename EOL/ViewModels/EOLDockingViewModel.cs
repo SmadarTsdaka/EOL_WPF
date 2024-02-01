@@ -25,7 +25,7 @@ namespace EOL.ViewModels
 		private ContentControl _deviceSimulatorsViewModel;
 
 		public EOLDockingViewModel(
-			TechnicianViewModel technicianVM,
+			OperatorViewModel technicianVM,
 			DesignViewModel designVM,
 			RunViewModel runVM,
 			CommunicationViewModel communicationSettings,
@@ -43,7 +43,7 @@ namespace EOL.ViewModels
 		}
 
 		private void CreateWindows(
-			TechnicianViewModel technicianVM,
+			OperatorViewModel technicianVM,
 			DesignViewModel designVM,
 			RunViewModel runVM,
 			CommunicationViewModel communicationSettings,

@@ -16,44 +16,10 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Controls;component/Resources/ButtonWithIcon.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/ScriptHandler;component/Resources/ScriptLogDiagramTemplate.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/ScriptRunner;component/Resources/ScriptStepTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Style x:Key="UserTypeRadioStyle" TargetType="RadioButton">
-                <Setter Property="Width" Value="100" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="RadioButton">
-                            <Border Name="brdr" 
-                                BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
-                                BorderThickness="1">
-
-                                <TextBlock Text="{TemplateBinding Content}" 
-                                       VerticalAlignment="Center" HorizontalAlignment="Center"
-                                       FontWeight="DemiBold"
-                                       FontSize="14"/>
-
-                            </Border>
-
-                            <ControlTemplate.Triggers>
-
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="brdr" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
-                                </Trigger>
-
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="brdr" Property="Background" Value="Transparent" />
-                                </Trigger>
-
-                            </ControlTemplate.Triggers>
-
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-
-            </Style>
-
+            
         </ResourceDictionary>
 
     </mah:MetroWindow.Resources>
@@ -93,18 +59,6 @@
             </Grid.ColumnDefinitions>
             
             <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="5,0" >
-
-                <RadioButton Content="Admin" 
-                             Style="{StaticResource UserTypeRadioStyle}" 
-                             GroupName="UserTypeGroup" 
-                             Margin="0,2,0,2"
-                             Command="{Binding SetAdminCommand}"/>
-                <RadioButton Content="Technician" 
-                             Style="{StaticResource UserTypeRadioStyle}" 
-                             GroupName="UserTypeGroup" 
-                             Margin="0,2,50,2"
-                             IsChecked="True"
-                             Command="{Binding SetTechnicianCommand}"/>
 
                 <Button Style="{StaticResource ButtonWithIconStyle}"
                         Width="25"

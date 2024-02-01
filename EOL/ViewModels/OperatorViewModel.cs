@@ -15,7 +15,7 @@ using System.IO;
 
 namespace EOL.ViewModels
 {
-	public class TechnicianViewModel:ObservableObject
+	public class OperatorViewModel:ObservableObject
 	{
 		public enum ScriptStateEnum { Running, Pass, Fail, None, }
 
@@ -38,7 +38,7 @@ namespace EOL.ViewModels
 
 		#region Constructor
 
-		public TechnicianViewModel(
+		public OperatorViewModel(
 			DevicesContainer devicesContainer,
 			ScriptUserData scriptUserData)
 		{

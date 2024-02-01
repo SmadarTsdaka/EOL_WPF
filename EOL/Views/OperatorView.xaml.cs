@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace EOL.Views
 {
 	/// <summary>
-	/// Interaction logic for UserView.xaml
+	/// Interaction logic for OperatorView.xaml
 	/// </summary>
-	public partial class TechnicianView : UserControl
+	public partial class OperatorView : UserControl
 	{
-		public TechnicianView()
+		public OperatorView()
 		{
 			InitializeComponent();
 		}
