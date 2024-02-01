@@ -17,17 +17,12 @@ namespace EOL.ViewModels
 {
 	public class EOLDockingViewModel : DocingBaseViewModel
 	{
-		private ContentControl _technicianView;
-		private ContentControl _designView;
-		private ContentControl _runView;
-		private ContentControl _mainScriptLogger;
+		private ContentControl _operatorView;
 		private ContentControl _communicationSettings;
 		private ContentControl _deviceSimulatorsViewModel;
 
 		public EOLDockingViewModel(
-			OperatorViewModel technicianVM,
-			DesignViewModel designVM,
-			RunViewModel runVM,
+			OperatorViewModel operatorVM,
 			CommunicationViewModel communicationSettings,
 			DeviceSimulatorsViewModel deviceSimulatorsViewModel) :
 			base("EOL")
@@ -35,29 +30,25 @@ namespace EOL.ViewModels
 			DockFill = true;
 
 			CreateWindows(
-				technicianVM,
-				designVM,
-				runVM,
+				operatorVM,
 				communicationSettings,
 				deviceSimulatorsViewModel);
 		}
 
 		private void CreateWindows(
-			OperatorViewModel technicianVM,
-			DesignViewModel designVM,
-			RunViewModel runVM,
+			OperatorViewModel operatorVM,
 			CommunicationViewModel communicationSettings,
 			DeviceSimulatorsViewModel deviceSimulatorsViewModel)
 		{
-			_technicianView = new ContentControl();
-			TechnicianView technicianView = new TechnicianView() { DataContext = technicianVM };
-			_technicianView.Content = technicianView;
-			SetHeader(_technicianView, "Technician");
+			_operatorView = new ContentControl();
+			OperatorView operatorView = new OperatorView() { DataContext = operatorVM };
+			_operatorView.Content = operatorView;
+			SetHeader(_operatorView, "Operator");
 			//SetCanClose(_userView, false);
-			SetCanAutoHide(_technicianView, false);
-			SetCanFloat(_technicianView, false);
-			SetCanDocument(_technicianView, false);
-			Children.Add(_technicianView);
+			SetCanAutoHide(_operatorView, false);
+			SetCanFloat(_operatorView, false);
+			SetCanDocument(_operatorView, false);
+			Children.Add(_operatorView);
 
 
 			_communicationSettings = new ContentControl();
@@ -74,36 +65,6 @@ namespace EOL.ViewModels
 			SetFloatParams(_deviceSimulatorsViewModel);
 			Children.Add(_deviceSimulatorsViewModel);
 
-
-			DesignView designView = new DesignView() { DataContext = designVM };
-			CreateTabbedWindow(designView, "Design", string.Empty, out _designView);
-			SetDesiredWidthInDockedMode(_designView, 1200);
-
-			RunView runView = new RunView() { DataContext = runVM };
-			CreateTabbedWindow(runView, "Run", "Design", out _runView);
-			runVM.CreateScriptLogDiagramViewEvent += Run_CreateScriptLogDiagramViewEvent;
-			runVM.ShowScriptLogDiagramViewEvent += Run_ShowScriptLogDiagramViewEvent;
-		}
-
-		private void Run_CreateScriptLogDiagramViewEvent(ScriptLogDiagramViewModel mainScriptLogger)
-		{
-			_mainScriptLogger = new ContentControl();
-			ScriptLogDiagramView scriptLog = new ScriptLogDiagramView() { DataContext = mainScriptLogger };
-			_mainScriptLogger.Content = scriptLog;
-			SetHeader(_mainScriptLogger, "Script Run Diagram");
-			SetState(_mainScriptLogger, DockState.Hidden);
-			SetSideInDockedMode(_mainScriptLogger, DockSide.Right);
-			Children.Add(_mainScriptLogger);
-		}
-
-		private void Run_ShowScriptLogDiagramViewEvent()
-		{
-			OpenLogScript();
-		}
-
-		public void OpenLogScript()
-		{
-			SetState(_mainScriptLogger, DockState.Dock);
 		}
 
 		public void OpenCommSettings()
@@ -117,31 +78,5 @@ namespace EOL.ViewModels
 		}
 
 
-
-		public void ShowTechnician()
-		{			
-			SetState(_technicianView, DockState.Dock);
-			SetCanClose(_technicianView, false);
-		}
-
-		public void HideTechnician()
-		{
-			SetCanClose(_technicianView, true);
-			SetState(_technicianView, DockState.Hidden);
-		}
-
-		public void ShowAdmin()
-		{
-			SetState(_designView, DockState.Dock);
-			SetState(_runView, DockState.Dock);
-			SetState(_mainScriptLogger, DockState.Dock);
-		}
-
-		public void HideAdmin()
-		{
-			SetState(_designView, DockState.Hidden);
-			SetState(_runView, DockState.Hidden);
-			SetState(_mainScriptLogger, DockState.Hidden);
-		}
 	}
 }

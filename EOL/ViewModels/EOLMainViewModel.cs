@@ -39,9 +39,7 @@ namespace EOL.ViewModels
 
 		private EOLSettings _eolSettings;
 
-		private OperatorViewModel _userVM;
-		private DesignViewModel _designVM;
-		private RunViewModel _runVM;
+		private OperatorViewModel _operatorVM;
 
 		#endregion Fields
 
@@ -52,8 +50,6 @@ namespace EOL.ViewModels
 
 			Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-			SetAdminCommand = new RelayCommand(SetAdmin);
-			SetTechnicianCommand = new RelayCommand(SetTechnician);
 			ChangeDarkLightCommand = new RelayCommand(ChangeDarkLight);
 
 			ClosingCommand = new RelayCommand<CancelEventArgs>(Closing);
@@ -96,29 +92,21 @@ namespace EOL.ViewModels
 				UpdateSetup();
 
 
-				_userVM = new OperatorViewModel(DevicesContainter,_eolSettings.ScriptUserData);
-				_designVM = new DesignViewModel(DevicesContainter, _eolSettings.ScriptUserData);
-
-				ObservableCollection<DeviceParameterData> logParametersList = 
-					new ObservableCollection<DeviceParameterData>();
-				_runVM = new RunViewModel(logParametersList, DevicesContainter, _eolSettings.ScriptUserData, null);
+				_operatorVM = new OperatorViewModel(DevicesContainter,_eolSettings.ScriptUserData);
 
 				CommunicationViewModel communicationSettings = new CommunicationViewModel(DevicesContainter);
 				DeviceSimulatorsViewModel deviceSimulatorsViewModel =
 					new DeviceSimulatorsViewModel(DevicesContainter);
 
 				Docking = new EOLDockingViewModel(
-					_userVM,
-					_designVM,
-					_runVM,
+					_operatorVM,
 					communicationSettings,
 					deviceSimulatorsViewModel);
 
-				Docking.ShowTechnician();
-				Docking.HideAdmin();
 				SimulatorsButtonVisibility = Visibility.Collapsed;
-
-				_runVM.CreateScriptLoggerWindow();
+#if DEBUG
+				SimulatorsButtonVisibility = Visibility.Visible;
+#endif
 
 				try
 				{
@@ -201,26 +189,13 @@ namespace EOL.ViewModels
 			}
 		}
 
-		#endregion Load
+#endregion Load
 
 		private void DeviceSimulator()
 		{
 			Docking.OpenDeviceSimulators();
 		}
 
-		private void SetAdmin()
-		{
-			Docking.HideTechnician();
-			Docking.ShowAdmin();
-			SimulatorsButtonVisibility = Visibility.Visible;
-		}
-
-		private void SetTechnician()
-		{
-			Docking.ShowTechnician();
-			Docking.HideAdmin();
-			SimulatorsButtonVisibility = Visibility.Collapsed;
-		}
 
 		private void ChangeDarkLight()
 		{
@@ -233,12 +208,10 @@ namespace EOL.ViewModels
 			Docking.OpenCommSettings();
 		}
 
-		#endregion Methods
+#endregion Methods
 
-		#region Commands
+#region Commands
 
-		public RelayCommand SetAdminCommand { get; private set; }
-		public RelayCommand SetTechnicianCommand { get; private set; }
 		public RelayCommand ChangeDarkLightCommand { get; private set; }
 
 		public RelayCommand LoadedCommand { get; private set; }
@@ -247,6 +220,6 @@ namespace EOL.ViewModels
 		public RelayCommand CommunicationSettingsCommand { get; private set; }
 		public RelayCommand DeviceSimulatorCommand { get; private set; }
 
-		#endregion Commands
+#endregion Commands
 	}
 }
