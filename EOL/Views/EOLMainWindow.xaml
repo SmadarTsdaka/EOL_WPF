@@ -44,7 +44,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="5" />
             <RowDefinition Height="*" />
             <RowDefinition Height="5" />
@@ -80,24 +80,13 @@
                     <iconPacks:Material Kind="Connection" />
                 </Button>
 
-                <Button Style="{StaticResource ButtonWithIconStyle}"
-                        Visibility="{Binding SimulatorsButtonVisibility}"
-                        Width="25"
-                        Height="25"
-                        Margin="0,0,20,0"
-                        ToolTip="Device simulator"
-                        Command="{Binding DeviceSimulatorCommand}"
-                        VerticalAlignment="Center">
-                    <iconPacks:PackIconMaterial Kind="LanConnect" />
-                </Button>
-
             </StackPanel>
 
             <device_handler_views:CommunicationIndeicatorView DataContext="{Binding DevicesContainter}"
                                                               Grid.Column="2"/>
         </Grid>
 
-        <ContentControl Grid.Row="2" Content="{Binding Docking}" Margin="5"/>
+        <local:OperatorView Grid.Row="2" Content="{Binding Operator}" Margin="5"/>
 
         <Border Grid.Row="4" Background="{DynamicResource MahApps.Brushes.Accent}">
             <StackPanel Orientation="Horizontal">

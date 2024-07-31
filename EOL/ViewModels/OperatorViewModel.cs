@@ -69,9 +69,11 @@ namespace EOL.ViewModels
 
 		private GeneratedScriptData GetScript(string path)
 		{
-			GeneratedProjectData project = _openProjectForRun.Open(path, _devicesContainer, RunScript);
+			// TODO
+			return null;
+			//GeneratedProjectData project = _openProjectForRun.Open(path, _devicesContainer, RunScript);
 
-			return project.TestsList[0];
+			//return project.TestsList[0];
 		}
 
 		private void Run()

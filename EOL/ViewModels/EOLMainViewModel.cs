@@ -19,19 +19,23 @@ using ScriptRunner.ViewModels;
 using DeviceHandler.ViewModels;
 using System.Windows;
 using DeviceSimulators.ViewModels;
+using DeviceHandler.Views;
+using EOL.Views;
 
 namespace EOL.ViewModels
 {
-	public class EOLMainViewModel: ObservableObject
+	public class EOLMainViewModel : ObservableObject
 	{
 		#region Properties
 
 		public string Version { get; set; }
-		public EOLDockingViewModel Docking { get; set; }
 
 		public DevicesContainer DevicesContainter { get; set; }
 
-		public Visibility SimulatorsButtonVisibility { get; set; }
+		
+		public OperatorViewModel OperatorVM { get; set; }
+
+		public CommunicationViewModel CommunicationSettings { get; set; }
 
 		#endregion Properties
 
@@ -39,14 +43,13 @@ namespace EOL.ViewModels
 
 		private EOLSettings _eolSettings;
 
-		private OperatorViewModel _operatorVM;
 
 		#endregion Fields
 
 		#region Constructor
 
 		public EOLMainViewModel()
-		{		
+		{
 
 			Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
@@ -56,8 +59,7 @@ namespace EOL.ViewModels
 			LoadedCommand = new RelayCommand(Loaded);
 
 
-			CommunicationSettingsCommand = new RelayCommand(InitCommunicationSettings); 
-			DeviceSimulatorCommand = new RelayCommand(DeviceSimulator);
+			CommunicationSettingsCommand = new RelayCommand(InitCommunicationSettings);
 		}
 
 		#endregion Constructor
@@ -66,7 +68,7 @@ namespace EOL.ViewModels
 
 		private void Closing(CancelEventArgs e)
 		{
-			EOLSettings.SaveEvvaUserData("EOL",_eolSettings);
+			EOLSettings.SaveEvvaUserData("EOL", _eolSettings);
 		}
 
 		#region Load
@@ -74,8 +76,8 @@ namespace EOL.ViewModels
 		private void Loaded()
 		{
 			try
-			{ 
-			
+			{
+
 				LoggerService.Init("EOL.log", Serilog.Events.LogEventLevel.Information);
 				LoggerService.Inforamtion(this, "-------------------------------------- EOL ---------------------");
 
@@ -92,21 +94,10 @@ namespace EOL.ViewModels
 				UpdateSetup();
 
 
-				_operatorVM = new OperatorViewModel(DevicesContainter,_eolSettings.ScriptUserData);
+				OperatorVM = new OperatorViewModel(DevicesContainter, _eolSettings.ScriptUserData);
 
-				CommunicationViewModel communicationSettings = new CommunicationViewModel(DevicesContainter);
-				DeviceSimulatorsViewModel deviceSimulatorsViewModel =
-					new DeviceSimulatorsViewModel(DevicesContainter);
-
-				Docking = new EOLDockingViewModel(
-					_operatorVM,
-					communicationSettings,
-					deviceSimulatorsViewModel);
-
-				SimulatorsButtonVisibility = Visibility.Collapsed;
-#if DEBUG
-				SimulatorsButtonVisibility = Visibility.Visible;
-#endif
+				CommunicationSettings = new CommunicationViewModel(DevicesContainter);
+				
 
 				try
 				{
@@ -189,28 +180,29 @@ namespace EOL.ViewModels
 			}
 		}
 
-#endregion Load
+		#endregion Load
 
-		private void DeviceSimulator()
-		{
-			Docking.OpenDeviceSimulators();
-		}
 
 
 		private void ChangeDarkLight()
 		{
 			_eolSettings.IsLightTheme = !_eolSettings.IsLightTheme;
-			App.ChangeDarkLight(_eolSettings.IsLightTheme);			
+			App.ChangeDarkLight(_eolSettings.IsLightTheme);
 		}
 
 		private void InitCommunicationSettings()
 		{
-			Docking.OpenCommSettings();
+			CommunicationWindowView communicationWindowView = new CommunicationWindowView()
+			{
+				DataContext = CommunicationSettings
+			};
+
+			communicationWindowView.Show();
 		}
 
-#endregion Methods
+		#endregion Methods
 
-#region Commands
+		#region Commands
 
 		public RelayCommand ChangeDarkLightCommand { get; private set; }
 
@@ -218,8 +210,8 @@ namespace EOL.ViewModels
 		public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
 
 		public RelayCommand CommunicationSettingsCommand { get; private set; }
-		public RelayCommand DeviceSimulatorCommand { get; private set; }
+		
 
-#endregion Commands
+		#endregion Commands
 	}
 }
