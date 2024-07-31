@@ -8,6 +8,96 @@
              d:DesignHeight="450" d:DesignWidth="800">
     
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Column="0" Header="Operation Info">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="27" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="27" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="27" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Serial number" VerticalAlignment="Center" />
+                <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding SerialNumber}" />
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Part number" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding PartNumber}" />
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Operator name" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding OperatorName}" />
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Column="2" Header="Test Clock">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="27" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="27" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="27" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Start time" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding StartTime}" VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Duration" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Duration}" VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="End time" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding EndTime}" VerticalAlignment="Center"/>
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Column="4" Header="Result Counter">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="27" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="27" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="27" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Tested" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding NumberOfTested}" VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Failed" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding NumberOfFailed}" VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Passed" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding NumberOfPassed}" VerticalAlignment="Center"/>
+
+            </Grid>
+        </GroupBox>
+
     </Grid>
 </UserControl>

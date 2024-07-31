@@ -29,9 +29,9 @@ namespace EOL
 		public static void ChangeDarkLight(bool isLightTheme)
 		{
 			if (isLightTheme)
-				ThemeManager.Current.ChangeTheme(Current, "Light.Blue");
+				ThemeManager.Current.ChangeTheme(Current, "Light.Cobalt");
 			else
-				ThemeManager.Current.ChangeTheme(Current, "Dark.Blue");
+				ThemeManager.Current.ChangeTheme(Current, "Dark.Cobalt");
 		}
 
 		private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

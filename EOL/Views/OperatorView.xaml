@@ -8,101 +8,14 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100" />
-            <RowDefinition Height="5" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="5" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="5" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-
-            <TextBox Text="{Binding ErrorDescription}" 
-                     TextWrapping="Wrap" 
-                     VerticalScrollBarVisibility="Auto"
-                     Margin="5"
-                     BorderThickness="0"/>
-
-            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
-                <Button Content="Run" Command="{Binding RunCommand}" Width="95" Margin="0,0,50,0"/>
-
-                <Border Width="95" >
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
-                           Text="{Binding ScriptState}"
-                           Foreground="White"
-                           FontWeight="Bold"
-                           FontSize="16">
-
-                        <TextBlock.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource MahApps.Styles.TextBlock}">
-                                <Style.Triggers>
-
-                                    <DataTrigger Binding="{Binding ScriptState}" Value="None">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Resources>
-
-                    </TextBlock>
-
-                    <Border.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray1}" />
-                            <Setter Property="BorderThickness" Value="1" />
-
-                            <Style.Triggers>
-
-                                <DataTrigger Binding="{Binding ScriptState}" Value="None">
-                                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Gray3}" />
-                                </DataTrigger>
-
-                                <DataTrigger Binding="{Binding ScriptState}" Value="Running">
-                                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}" />
-                                </DataTrigger>
-
-                                <DataTrigger Binding="{Binding ScriptState}" Value="Pass">
-                                    <Setter Property="Background" Value="Green" />
-                                </DataTrigger>
-
-                                <DataTrigger Binding="{Binding ScriptState}" Value="Fail">
-                                    <Setter Property="Background" Value="Red" />
-                                </DataTrigger>
-
-                            </Style.Triggers>
-
-                        </Style>
-                    </Border.Resources>
-
-                </Border>
-            </StackPanel>
-        </Grid>
-
-        <Grid Grid.Row="2" Margin="10,0">
-
-            <ProgressBar Minimum="0" Maximum="100" Value="{Binding RunScript.ExecutedStepsPercentage}" />
-            
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock Grid.Column="4" Text="{Binding RunScript.ExecutedStepsPercentage}" 
-                           VerticalAlignment="Center" 
-                           FontSize="14" FontWeight="DemiBold"
-                           Foreground="White"/>
-                <TextBlock Grid.Column="4" Text="%" 
-                           VerticalAlignment="Center" 
-                           FontSize="14" FontWeight="DemiBold"
-                           Foreground="White"/>
-            </StackPanel>
-
-        </Grid>
-
-        
+        <local:RunDataView Grid.Row="0" DataContext="{Binding RunData}"/>
 
     </Grid>
 </UserControl>
