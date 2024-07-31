@@ -14,6 +14,7 @@ namespace EOL.ViewModels
 		#region Properties
 
 		public RunData RunData { get; set; }
+		public RunViewModel Run { get; set; }
 
 		#endregion Properties
 
@@ -30,9 +31,8 @@ namespace EOL.ViewModels
 			ScriptUserData scriptUserData)
 		{
 			RunData = new RunData();
-		}
-
-		
+			Run = new RunViewModel();
+		}		
 
 		#endregion Constructor
 
@@ -44,7 +44,7 @@ namespace EOL.ViewModels
 
 		#region Commands
 
-		public RelayCommand RunCommand { get; private set; }
+		
 
 		#endregion Commands
 	}

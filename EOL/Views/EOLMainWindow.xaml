@@ -86,7 +86,7 @@
                                                               Grid.Column="2"/>
         </Grid>
 
-        <local:OperatorView Grid.Row="2" DataContext="{Binding Operator}" Margin="5"/>
+        <local:OperatorView Grid.Row="2" DataContext="{Binding OperatorVM}" Margin="5"/>
 
         <Border Grid.Row="4" Background="{DynamicResource MahApps.Brushes.Accent}">
             <StackPanel Orientation="Horizontal">

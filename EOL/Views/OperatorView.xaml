@@ -6,16 +6,17 @@
              xmlns:local="clr-namespace:EOL.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="10" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="10" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <local:RunDataView Grid.Row="0" DataContext="{Binding RunData}"/>
+
+        <local:RunView Grid.Row="2" DataContext="{Binding Run}"/>
 
     </Grid>
 </UserControl>
