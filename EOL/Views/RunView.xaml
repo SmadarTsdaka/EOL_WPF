@@ -3,9 +3,59 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:Converters;assembly=Converters"
              xmlns:local="clr-namespace:EOL.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+
+        <Style x:Key="RedButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="brdr" BorderBrush="Transparent" BorderThickness="2"
+                                CornerRadius="5"
+                                Height="30">
+                            <TextBlock x:Name="tb" Text="{TemplateBinding Content}" 
+                                       VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="brdr" Property="Background" Value="{DynamicResource MahApps.Brushes.Gray10}" />
+                                <Setter TargetName="tb" Property="Foreground" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                                <Setter TargetName="brdr" Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray8}" />
+                            </Trigger>
+
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter TargetName="brdr" Property="Background" Value="Red" />
+                                <Setter TargetName="tb" Property="Foreground" Value="White" />
+                                <Setter TargetName="brdr" Property="BorderBrush" Value="Transparent" />
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="brdr" Property="Background" Value="{DynamicResource MahApps.Brushes.Gray10}" />
+                                <Setter TargetName="tb" Property="Foreground" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                                <Setter TargetName="brdr" Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray1}" />
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5" />
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+
+    </UserControl.Resources>
     
     <Grid>
         <Grid.RowDefinitions>
@@ -27,13 +77,24 @@
         <Grid Grid.Row="2" Margin="5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="Run" Command="{Binding RunCommand}"/>
+            <Button Grid.Column="0" 
+                    Content="Run" 
+                    Command="{Binding RunCommand}" 
+                    IsEnabled="{Binding IsRunButtonEnabled}"/>
+            
+            <Button Grid.Column="2" 
+                    Style="{StaticResource RedButtonStyle}"
+                    Content="Abort" 
+                    Command="{Binding AbortCommand}" 
+                    IsEnabled="{Binding IsRunButtonEnabled, Converter={StaticResource InverseBoolConverter}}"/>
 
-            <Border Grid.Column="2" BorderBrush="{DynamicResource MahApps.Brushes.Gray1}" BorderThickness="1">
+            <Border Grid.Column="4" BorderBrush="{DynamicResource MahApps.Brushes.Gray1}" BorderThickness="1">
                 <Border.Resources>
                     <Style TargetType="Border">
                         <Style.Triggers>
@@ -44,6 +105,10 @@
 
                             <DataTrigger Binding="{Binding RunState}" Value="Ended">
                                 <Setter Property="Background" Value="MediumPurple" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding RunState}" Value="Aborted">
+                                <Setter Property="Background" Value="Red" />
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding RunState}" Value="None">
@@ -68,7 +133,7 @@
             <TextBlock VerticalAlignment="Center" Text="%" Foreground="White" FontSize="16"/>
         </StackPanel>
 
-        <TextBlock Grid.Row="6" Text="{Binding ScriptRunningItem}" FontSize="16"  Margin="5,0,0,0"/>
+        <TextBlock Grid.Row="6" Text="{Binding RunScript.CurrentScript.CurrentStep.Description}" FontSize="16"  Margin="5,0,0,0"/>
 
         
 
