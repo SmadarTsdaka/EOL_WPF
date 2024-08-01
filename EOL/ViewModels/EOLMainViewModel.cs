@@ -22,11 +22,23 @@ using DeviceSimulators.ViewModels;
 using DeviceHandler.Views;
 using EOL.Views;
 using Syncfusion.DocIO.DLS;
+using System.Xml.Linq;
 
 namespace EOL.ViewModels
 {
 	public class EOLMainViewModel : ObservableObject
 	{
+		public class ModeType
+		{
+			public string Name { get; set; }
+
+			public override string ToString()
+			{
+				return Name;
+			}
+		}
+
+
 		#region Properties
 
 		public string Version { get; set; }
@@ -39,6 +51,8 @@ namespace EOL.ViewModels
 		public CommunicationViewModel CommunicationSettings { get; set; }
 
 		public SettingsViewModel SettingsVM { get; set; }
+
+		public List<ModeType> ModeTypeList { get; set; }
 
 		#endregion Properties
 
@@ -62,10 +76,17 @@ namespace EOL.ViewModels
 
 			ClosingCommand = new RelayCommand<CancelEventArgs>(Closing);
 			LoadedCommand = new RelayCommand(Loaded);
+			ModesDropDownMenuItemCommand = new RelayCommand<string>(ModesDropDownMenuItem);
 
 
 			CommunicationSettingsCommand = new RelayCommand(InitCommunicationSettings);
 			SettingsCommand = new RelayCommand(Settings);
+
+			ModeTypeList = new List<ModeType>
+				{
+					new ModeType() { Name = "Admin" },
+					new ModeType() { Name = "Operator" },
+				};
 		}
 
 		#endregion Constructor
@@ -232,6 +253,17 @@ namespace EOL.ViewModels
 			settingsView.Show();
 		}
 
+		private void ModesDropDownMenuItem(string mode)
+		{
+			switch (mode)
+			{
+				case "Admin":
+					break;
+				case "Operator":
+					break;
+			}
+		}
+
 		#endregion Methods
 
 		#region Commands
@@ -244,6 +276,7 @@ namespace EOL.ViewModels
 		public RelayCommand CommunicationSettingsCommand { get; private set; }
 		public RelayCommand SettingsCommand { get; private set; }
 
+		public RelayCommand<string> ModesDropDownMenuItemCommand { get; private set; }
 
 		#endregion Commands
 	}

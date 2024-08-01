@@ -90,6 +90,25 @@
                     <iconPacks:PackIconOcticons Kind="Gear" />
                 </Button>
 
+                <mah:DropDownButton Content="Mode"
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding ModeTypeList}"
+                    Margin="0,0,20,0">
+
+                    <mah:DropDownButton.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
+                            <Setter Property="Command" Value="{Binding Path=DataContext.ModesDropDownMenuItemCommand, 
+                                                       RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type mah:DropDownButton}} }" />
+                            <Setter Property="CommandParameter" Value="{Binding Name}" />
+                        </Style>
+                    </mah:DropDownButton.ItemContainerStyle>
+
+                    <mah:DropDownButton.Icon>
+                        <iconPacks:PackIconMaterial Kind="AccountMultiple" />
+                    </mah:DropDownButton.Icon>
+
+                </mah:DropDownButton>
+
             </StackPanel>
 
             <device_handler_views:CommunicationIndeicatorView DataContext="{Binding DevicesContainter}"
