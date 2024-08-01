@@ -21,6 +21,7 @@ using System.Windows;
 using DeviceSimulators.ViewModels;
 using DeviceHandler.Views;
 using EOL.Views;
+using Syncfusion.DocIO.DLS;
 
 namespace EOL.ViewModels
 {
@@ -32,16 +33,20 @@ namespace EOL.ViewModels
 
 		public DevicesContainer DevicesContainter { get; set; }
 
-		
+
 		public OperatorViewModel OperatorVM { get; set; }
 
 		public CommunicationViewModel CommunicationSettings { get; set; }
+
+		public SettingsViewModel SettingsVM { get; set; }
 
 		#endregion Properties
 
 		#region Fields
 
 		private EOLSettings _eolSettings;
+
+		private ObservableCollection<FilesData> _filesList;
 
 
 		#endregion Fields
@@ -60,6 +65,7 @@ namespace EOL.ViewModels
 
 
 			CommunicationSettingsCommand = new RelayCommand(InitCommunicationSettings);
+			SettingsCommand = new RelayCommand(Settings);
 		}
 
 		#endregion Constructor
@@ -97,7 +103,21 @@ namespace EOL.ViewModels
 				OperatorVM = new OperatorViewModel(DevicesContainter, _eolSettings.ScriptUserData);
 
 				CommunicationSettings = new CommunicationViewModel(DevicesContainter);
-				
+
+				_filesList = new ObservableCollection<FilesData>();
+				for (int i = 0; i < 10; i++)
+				{
+					FilesData data = new FilesData()
+					{
+						Description = $"File {i + 1}"
+					};
+
+					_filesList.Add(data);
+
+				}
+
+				SettingsVM = new SettingsViewModel();
+
 
 				try
 				{
@@ -200,6 +220,18 @@ namespace EOL.ViewModels
 			communicationWindowView.Show();
 		}
 
+		private void Settings()
+		{
+			SettingsView settingsView = new SettingsView()
+			{
+				DataContext = SettingsVM
+			};
+
+			SettingsVM.FilesList = _filesList;
+
+			settingsView.Show();
+		}
+
 		#endregion Methods
 
 		#region Commands
@@ -210,7 +242,8 @@ namespace EOL.ViewModels
 		public RelayCommand<CancelEventArgs> ClosingCommand { get; private set; }
 
 		public RelayCommand CommunicationSettingsCommand { get; private set; }
-		
+		public RelayCommand SettingsCommand { get; private set; }
+
 
 		#endregion Commands
 	}
