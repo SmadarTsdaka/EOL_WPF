@@ -4,8 +4,10 @@ using CommunityToolkit.Mvvm.Input;
 using DeviceHandler.Models;
 using ScriptHandler.Models;
 using ScriptHandler.Services;
+using ScriptHandler.ViewModels;
 using ScriptRunner.Enums;
 using ScriptRunner.Services;
+using ScriptRunner.ViewModels;
 using Services.Services;
 using System;
 using System.Collections.ObjectModel;
@@ -30,12 +32,15 @@ namespace EOL.ViewModels
 
 		public RunScriptService RunScript { get; set; }
 
+		public ScriptDiagramViewModel ScriptDiagram { get; set; }
+
+		public bool IsAdminMode { get; set; }
+
 		#endregion Properties
 
 		#region Fields
 
 		private GeneratedScriptData _currentScript;
-		
 
 		private DevicesContainer _devicesContainer;
 
@@ -52,7 +57,7 @@ namespace EOL.ViewModels
 
 
 			IsRunButtonEnabled = true;
-			
+
 			RunCommand = new RelayCommand(Run);
 			AbortCommand = new RelayCommand(Abort);
 
@@ -65,6 +70,7 @@ namespace EOL.ViewModels
 			RunScript.ScriptEndedEvent += _runScriptService_ScriptEndedEvent;
 			RunScript.ScriptStartedEvent += _runScriptService_ScriptStartedEvent;
 
+			ScriptDiagram = new ScriptDiagramViewModel();
 
 			OpenProjectForRunService openProject = new OpenProjectForRunService();
 			GeneratedProjectData project = openProject.Open(
@@ -88,7 +94,10 @@ namespace EOL.ViewModels
 
 		private void _runScriptService_ScriptStartedEvent()
 		{
+			if(_currentScript == null)
+				return;
 
+			ScriptDiagram.DrawScript(_currentScript);
 		}
 
 		private void _runScriptService_ScriptEndedEvent(ScriptStopModeEnum stopeMode)
@@ -102,9 +111,7 @@ namespace EOL.ViewModels
 			RunState = RunStateEnum.Running;
 
 			RunScript.Run(null, _currentScript, null, false);
-		}
-
-		
+		}		
 
 		private void Abort()
 		{

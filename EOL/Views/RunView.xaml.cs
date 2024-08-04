@@ -24,5 +24,5 @@ namespace EOL.Views
 		{
 			InitializeComponent();
 		}
-	}
+    }
 }

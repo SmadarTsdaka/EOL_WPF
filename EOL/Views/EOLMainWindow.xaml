@@ -17,6 +17,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Controls;component/Resources/ButtonWithIcon.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/ScriptRunner;component/Resources/ScriptStepTemplate.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/ScriptHandler;component/Resources/ScriptLogDiagramTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             
@@ -90,10 +91,11 @@
                     <iconPacks:PackIconOcticons Kind="Gear" />
                 </Button>
 
-                <mah:DropDownButton Content="Mode"
-                    DisplayMemberPath="Name"
-                    ItemsSource="{Binding ModeTypeList}"
-                    Margin="0,0,20,0">
+                <mah:DropDownButton Content="{Binding SelectedMode}"
+                                    DisplayMemberPath="Name"
+                                    ItemsSource="{Binding ModeTypeList}"
+                                    Margin="0,0,20,0"
+                                    Width="100">
 
                     <mah:DropDownButton.ItemContainerStyle>
                         <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">

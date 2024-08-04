@@ -54,6 +54,8 @@ namespace EOL.ViewModels
 
 		public List<ModeType> ModeTypeList { get; set; }
 
+		public string SelectedMode { get; set; }
+
 		#endregion Properties
 
 		#region Fields
@@ -69,6 +71,7 @@ namespace EOL.ViewModels
 
 		public EOLMainViewModel()
 		{
+			SelectedMode = "Operator";
 
 			Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
@@ -84,8 +87,8 @@ namespace EOL.ViewModels
 
 			ModeTypeList = new List<ModeType>
 				{
-					new ModeType() { Name = "Admin" },
 					new ModeType() { Name = "Operator" },
+					new ModeType() { Name = "Admin" },
 				};
 		}
 
@@ -258,8 +261,12 @@ namespace EOL.ViewModels
 			switch (mode)
 			{
 				case "Admin":
+					SelectedMode = "Admin";
+					OperatorVM.Run.IsAdminMode = true;
 					break;
 				case "Operator":
+					SelectedMode = "Operator";
+					OperatorVM.Run.IsAdminMode = false;
 					break;
 			}
 		}
