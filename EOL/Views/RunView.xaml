@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:script_handler_converters="clr-namespace:ScriptHandler.Converter;assembly=ScriptHandler"
              xmlns:converters="clr-namespace:Converters;assembly=Converters"
              xmlns:script_handler_views="clr-namespace:ScriptHandler.Views;assembly=ScriptHandler"
              xmlns:local="clr-namespace:EOL.Views"
@@ -56,6 +57,7 @@
 
         <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <script_handler_converters:ContentConverter x:Key="ContentConverter" />
 
     </UserControl.Resources>
 
@@ -75,8 +77,10 @@
                 <RowDefinition Height="27" />
                 <RowDefinition Height="5" />
                 <RowDefinition Height="27" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="27" />
                 <RowDefinition Height="20" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Border Grid.Row="0" Background="{DynamicResource MahApps.Brushes.Accent}" >
@@ -144,12 +148,21 @@
 
             <TextBlock Grid.Row="6" Text="{Binding RunScript.CurrentScript.CurrentStep.Description}" FontSize="16"  Margin="5,0,0,0"/>
 
+            <ProgressBar Grid.Row="8"
+                         Minimum="0"
+                         Maximum="100"
+                         Value="{Binding RunScript.CurrentScript.CurrentStep.ProgressPercentage}"/>
+            <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock VerticalAlignment="Center" Text="{Binding RunScript.CurrentScript.CurrentStep.ProgressPercentage}" 
+                           Foreground="White" FontSize="16"/>
+                <TextBlock VerticalAlignment="Center" Text="%" Foreground="White" FontSize="16"/>
+            </StackPanel>
 
-
-            <ListView Grid.Row="8"
+            <ListView Grid.Row="10"
                       FontSize="14" 
                       BorderThickness="1"
                       MinHeight="220"
+                      Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Collapse}"
                       BorderBrush="{DynamicResource MahApps.Brushes.Accent2}"
                       ItemsSource="{Binding TerminalTextsList}"
                       Margin="5,0">
