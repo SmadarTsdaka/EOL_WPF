@@ -44,6 +44,9 @@ namespace EOL.ViewModels
 
 		private DevicesContainer _devicesContainer;
 
+		private int _totalNumOfSteps;
+		private int _stepsCounter;
+
 		#endregion Fields
 
 		#region Constructor
@@ -69,12 +72,14 @@ namespace EOL.ViewModels
 			RunScript = new RunScriptService(null, _devicesContainer, stopScriptStep, null);
 			RunScript.ScriptEndedEvent += _runScriptService_ScriptEndedEvent;
 			RunScript.ScriptStartedEvent += _runScriptService_ScriptStartedEvent;
+			RunScript.CurrentStepChangedEvent += RunScript_CurrentStepChangedEvent;
+
 
 			ScriptDiagram = new ScriptDiagramViewModel();
 
 			OpenProjectForRunService openProject = new OpenProjectForRunService();
 			GeneratedProjectData project = openProject.Open(
-				@"C:\Users\smadar\Documents\Scripts\Tests\Short Delay.scr",
+				@"C:\Users\smadar\Documents\Scripts\Tests\Simple Script.scr",
 				devicesContainer,
 				null,
 				stopScriptStep);
@@ -102,7 +107,16 @@ namespace EOL.ViewModels
 
 		private void _runScriptService_ScriptEndedEvent(ScriptStopModeEnum stopeMode)
 		{
+			if (stopeMode == ScriptStopModeEnum.Ended)
+				RunPercentage = 100;
+
 			Stop(stopeMode);
+		}
+
+		private void RunScript_CurrentStepChangedEvent(ScriptStepBase obj)
+		{
+			RunPercentage = (int)(((double)_stepsCounter / (double)_currentScript.ScriptItemsList.Count) * 100);
+			_stepsCounter++;
 		}
 
 		private void Run()
@@ -111,6 +125,10 @@ namespace EOL.ViewModels
 			RunState = RunStateEnum.Running;
 
 			RunScript.Run(null, _currentScript, null, false);
+
+			RunPercentage = 0;
+			_totalNumOfSteps = _currentScript.ScriptItemsList.Count + 1;
+			_stepsCounter = 1;
 		}		
 
 		private void Abort()

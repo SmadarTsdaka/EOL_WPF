@@ -77,7 +77,7 @@
                 <RowDefinition Height="27" />
                 <RowDefinition Height="5" />
                 <RowDefinition Height="27" />
-                <RowDefinition Height="5" />
+                <RowDefinition Height="2" />
                 <RowDefinition Height="27" />
                 <RowDefinition Height="20" />
                 <RowDefinition Height="Auto" />
