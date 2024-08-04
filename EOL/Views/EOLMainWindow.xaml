@@ -94,7 +94,7 @@
                 <mah:DropDownButton Content="{Binding SelectedMode}"
                                     DisplayMemberPath="Name"
                                     ItemsSource="{Binding ModeTypeList}"
-                                    Margin="0,0,20,0"
+                                    Margin="0,2,20,2"
                                     Width="100">
 
                     <mah:DropDownButton.ItemContainerStyle>
